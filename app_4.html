@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<meta charset="UTF-8">
+  <meta name="description" content="Application for marking attendance.">
+  <meta name="keywords" content="Attendance, Application">
+  <meta name="author" content="Saumya Ray">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>App 1.0.0</title>
+	<!-- Add Days to Group -->
+
+	<!-- <link rel="stylesheet" type="text/css" href="libs/normalize.css"> -->
+	<link rel="stylesheet" type="text/css" href="libs/bulma.css">
+
+	<script type="text/javascript" src="libs/jquery-3.4.1.js"></script>
+	<script type="text/javascript" src="js/aconfig.js"></script>
+	<script type="text/javascript" src="js/app_4.js"></script>
+
+</head>
+<body>
+
+	<nav class="breadcrumb" aria-label="breadcrumbs">
+	  <ul>
+	    <li><a href="/">Home</a></li>
+	    <li class="is-active"><a href="#" aria-current="page">Add Days</a></li>
+	  </ul>
+	</nav>
+
+	<section class="section">
+
+		<!-- UI | Display Batch Names -->
+		<div class="container">
+
+			<div class="title">Add Days to a Batch</div>
+
+			<!-- Notification / Messages -->
+			<div class="notification has-background-danger has-text-white" id="div_info">
+    		Show <strong>All Batch</strong> names.
+  		</div>
+		  
+			<div class="field">
+			  <p class="control">
+					<a class="button is-info" id="btn_show_allBatchNames"> Show All Batch Names </a>
+				</p>
+			</div>
+			<div class="field">
+				<div class="control">
+					<div class="select is-primary is-large">
+						<select id="id_all_batches">
+							<option value="0"> Need to get them </option>
+							<!-- filled in from backend -->
+							<!--
+							<option>Select dropdown</option>
+							<option>With options</option>
+							-->
+						</select>
+					</div>
+				</div>
+			</div>
+			<p> &nbsp </p>
+		</div> <!-- /container -->
+
+		<!-- UI | Add Person -->
+		<div class="container" id="id_addDaysUI">
+
+			<div class="title">Add Days to batch, <span id="id_sBName" class="has-text-info">Nice Batch</span> .</div>
+			<!-- Notification / Messages -->
+			<div class="notification has-background-danger has-text-white" id="div_notification">
+    		Add <strong>People</strong> to a Batch.
+  		</div>
+		  
+			<div class="field">
+			  <label class="label">Day 1 : Start Date</label>
+			  <div class="control">
+			    <input class="input is-primary" type="date" placeholder="Saumya Ray" id="dt_1">
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label">Day 2</label>
+			  <div class="control">
+			    <input class="input is-primary" type="date" placeholder="Saumya Ray" id="dt_2">
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label">Day 3</label>
+			  <div class="control">
+			    <input class="input is-primary" type="date" placeholder="Saumya Ray" id="dt_3">
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label">Day 4</label>
+			  <div class="control">
+			    <input class="input is-primary" type="date" placeholder="Saumya Ray" id="dt_4">
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label">Day 5</label>
+			  <div class="control">
+			    <input class="input is-primary" type="date" placeholder="Saumya Ray" id="dt_5">
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label">Day 6</label>
+			  <div class="control">
+			    <input class="input is-primary" type="date" placeholder="Saumya Ray" id="dt_6">
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label">Day 7</label>
+			  <div class="control">
+			    <input class="input is-primary" type="date" placeholder="Saumya Ray" id="dt_7">
+			  </div>
+			</div>
+			
+
+
+			<div class="field">
+			  <div class="control">
+					<a class="button is-info" id="btn_add_dates"> Add Days to Batch </a>
+				</div>
+			</div>
+			
+		</div> <!-- /container -->
+
+
+	</section>
+</body>
+</html>

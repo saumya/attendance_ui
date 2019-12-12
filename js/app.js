@@ -1,0 +1,12 @@
+//
+console.log('Application:Entry');
+//
+/*
+$(document).ready(function(){
+	console.log('Ready!');
+});
+*/
+//
+$(function(){
+	console.log('Ready');
+});
