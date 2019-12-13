@@ -71,12 +71,18 @@ $(function(){
 	});
 	//---------------------------------------------------------------------
 	// Get Batch names to show
-	$('#btn_show_allBatchNames').on('click',function(){
-		console.log('TODO: getAllBatchNames');
+	$('#btn_show_allBatchNames').on('click',function(event){
+		console.log('getAllBatchNames');
+		event.preventDefault();
+		const msg = 'Info: Please wait, getting data.';
+		showInfoToUser(msg);
+
+		//
 		fetch(requestURL_getBatchNames).then(function(resultData){
 			console.log('getAllBatchNames: done:');
 			resultData.json()
 		  	.then(function(rData){
+		  		$('#div_info').hide();
 		  		/*
 		  		console.log('------- data');
 		  		console.log(rData);
@@ -163,4 +169,11 @@ $(function(){
 	  	console.log('------ ERROR -------- /');
 		});
 	});// Click Handler /END
+	//
+
+	const showInfoToUser = function(message){
+		$('#div_info').html(message);
+		$('#div_info').show();
+	}
+
 });
