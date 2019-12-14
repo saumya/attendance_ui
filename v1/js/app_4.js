@@ -126,23 +126,25 @@ $(function(){
 		var a = $('#dt_1').val();
 		var b = new Date(a);
 
-		b.setDate(b.getDate()+1);
-		$('#dt_2').val(b.getFullYear()+'-'+b.getMonth()+'-'+b.getDate());
+		var theMonth = b.getMonth() + 1; //since it's 0 based
 
 		b.setDate(b.getDate()+1);
-		$('#dt_3').val(b.getFullYear()+'-'+b.getMonth()+'-'+b.getDate());
+		$('#dt_2').val(b.getFullYear()+'-'+ theMonth +'-'+b.getDate());
 
 		b.setDate(b.getDate()+1);
-		$('#dt_4').val(b.getFullYear()+'-'+b.getMonth()+'-'+b.getDate());
+		$('#dt_3').val(b.getFullYear()+'-'+ theMonth +'-'+b.getDate());
 
 		b.setDate(b.getDate()+1);
-		$('#dt_5').val(b.getFullYear()+'-'+b.getMonth()+'-'+b.getDate());
+		$('#dt_4').val(b.getFullYear()+'-'+ theMonth +'-'+b.getDate());
 
 		b.setDate(b.getDate()+1);
-		$('#dt_6').val(b.getFullYear()+'-'+b.getMonth()+'-'+b.getDate());
+		$('#dt_5').val(b.getFullYear()+'-'+ theMonth +'-'+b.getDate());
 
 		b.setDate(b.getDate()+1);
-		$('#dt_7').val(b.getFullYear()+'-'+b.getMonth()+'-'+b.getDate());
+		$('#dt_6').val(b.getFullYear()+'-'+ theMonth +'-'+b.getDate());
+
+		b.setDate(b.getDate()+1);
+		$('#dt_7').val(b.getFullYear()+'-'+ theMonth +'-'+b.getDate());
 
 		return false;
 	});
