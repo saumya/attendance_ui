@@ -259,7 +259,9 @@ $(function(){
 		if(aPeople.length>0){
 			var allLi = aPeople.map( person => {
 				//var s = '<option value=' + batch['id'] +'>' + batch['name'] + '</option>';
-				var s = '<li><label class="checkbox"><input type="checkbox" onclick="onPersonClicked('+person.id+')">'+person.name+' | '+person.phone+' | id='+person.id+' | isMorning='+person.batch_is_morning+'</label></li>';
+				var batch = ( person.batch_is_morning ? '<span class="is-size-6 has-text-info"> M </span>' : '<span class="is-size-6 has-text-danger"> E </span>' );
+				//var s = '<li><label class="checkbox"><input type="checkbox" onclick="onPersonClicked('+person.id+')">'+person.name+' | '+person.phone+' | id='+person.id+' | isMorning='+person.batch_is_morning+'</label></li>';
+				var s = '<li><label class="checkbox is-size-4"><input type="checkbox" onclick="onPersonClicked('+person.id+')"> <span style="padding-left:1em;"></span>' + person.name + ' . '+batch+' . ' +'<span class="is-family-monospace is-size-6">' + person.phone +'</span>' +'</label></li>';
 				allViewLi+= s;
 			});
 			//$('#id_all_people').html(allViewLi);
@@ -308,7 +310,9 @@ $(function(){
 		const allLi = aDays.map( day => {
 			//console.log(batch);
 			//var s = '<option value='+ batch['id'] +'>'+batch['id']+'-'+batch['name']+'</option>';
-			var s = '<option value=' + day['id'] +'>' + day['name']+'-id='+day['id'] + '</option>';
+			
+			//var s = '<option value=' + day['id'] +'>' + day['name']+'-id='+day['id'] + '</option>';
+			var s = '<option value=' + day['id'] +'>' + day['name'] + '</option>';
 			allViewLi+= s;
 		});
 		//console.log(allViewLi);

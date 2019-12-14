@@ -224,7 +224,16 @@ const renderPresence = function(aData){
 		$('#id_info_present').html('Total Present - '+aData.length);
 		//
 		aData.map(function(aPresent){
-			sHTML += '<div>'+ aPresent.nameOfPerson +' : morning='+ aPresent.isOnMorning+' : evening='+ aPresent.isOnEvening +'</div>';
+			var presentOn = 'morning';
+			if(aPresent.isOnMorning){
+				presentOn = '<span class="is-size-6 has-text-info"> M </span>';
+			}else if(aPresent.isOnEvening){
+				presentOn = '<span class="is-size-6 has-text-danger"> E </span>';
+			}else{
+				presentOn = '<span class="is-size-6"> Absent </span>';
+			}
+			//sHTML += '<div>'+ aPresent.nameOfPerson +' : morning='+ aPresent.isOnMorning+' : evening='+ aPresent.isOnEvening +'</div>';
+			sHTML += '<div> <span class="is-size-4">'+ aPresent.nameOfPerson +'</span> . present on '+ presentOn +'</div>';
 		});
 	}else{
 		$('#id_info_present').html('');
