@@ -5,8 +5,63 @@ $(function(){
 	//const REST_URI = "http://localhost:3000";
 
 	const requestURL = REST_URI+'/createGroup/';
+	var requestURL_getBatchNames = REST_URI+'/getBatchNames/';
 	//
 	$('#div_notification').hide();
+	//
+	//---------------------------------------------------------------------
+	// Get Batch names to show
+	const getAllBatchNames = function(){
+		console.log('getAllBatchNames');
+		const msg = 'Info: Please wait, getting data.';
+		showInfoToUser(msg);
+
+		//
+		fetch(requestURL_getBatchNames).then(function(resultData){
+			console.log('getAllBatchNames: done:');
+			resultData.json()
+		  	.then(function(rData){
+		  		$('#div_info').hide();
+		  		/*
+		  		console.log('------- data');
+		  		console.log(rData);
+		  		console.log('------- data /');
+		  		*/
+		  		renderAllBatchNames(rData);
+		  	})
+		  	.catch(function(error2){
+		  		console.log('JSON Error');
+		  		console.log(error2);
+		  	});
+		}).catch(function(error1){
+			console.log('getAllBatchNames: ERROR :--------------');
+			console.log(error1);
+		});
+	}
+
+	const renderAllBatchNames = function(aNames){
+		console.log('renderAllBatchNames');
+		console.log(aNames);
+		$('#div_notification').hide();
+
+		// JSON.parse(jstring);
+		//console.log('aNames.length=',aNames.length);
+		//console.log('aNames[0]=',aNames[0]);
+		//var allViewLi = '<option value="0"> - Choose a Batch - </option>';
+		var allViewLi = '';
+		const allLi = aNames.map( batch => {
+			//console.log(batch);
+			//var s = '<option value='+ batch['id'] +'>'+batch['id']+'-'+batch['name']+'</option>';
+			//var s = '<option value=' + batch['id'] +'>' + batch['name'] + '</option>';
+			var s = '<p class="subtitle is-4">' + batch['name'] + '</p>';
+			allViewLi+= s;
+		});
+		//console.log(allViewLi);
+		$('#id_all_batches').html(allViewLi);
+		//
+		$('#id_all_batches').show();
+	}
+	//---------------------------------------------------------------------
 	//
 	$('#btn_create').on('click',function(){
 		var newName = $('#txt_batch_name').val();
@@ -50,7 +105,6 @@ $(function(){
 		  	console.log('+-----------------------Error /');
 		  });
 		  
-
 		  /*
 		  // using Fetch API
 		  // working fine
@@ -84,4 +138,13 @@ $(function(){
 			//
 		}
 	});
+	//=============================================================================
+	
+	const showInfoToUser = function(message){
+		$('#div_notification').html(message);
+		$('#div_notification').show();
+	}
+	//=============================================================================
+	//
+	getAllBatchNames();
 });
