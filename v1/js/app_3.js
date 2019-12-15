@@ -100,6 +100,12 @@ $(function(){
 			
 			//console.log('allDaysObjs',allDaysObjs);
 
+			// Note :
+			// It is possible to have
+			// allDaysObjs[j] !== undefined
+			// because we have set index 0 as undefined while sorting the Days Array in last function
+			//
+
 			//console.log('i',i,':','j',j);
 			//console.log('allDaysObjs[j]',allDaysObjs[j]);
 			
