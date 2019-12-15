@@ -95,7 +95,34 @@ $(function(){
 	//--- renderAllDaysOfBatch ----------------------------------------------------------------------
 
 	const renderAllDaysOfBatch = function(aDays){
-		console.log('renderAllDaysOfBatch : ');
+		//console.log('renderAllDaysOfBatch : ');
+		
+		//------------------------------------------------
+		const sortBatchDays = function(allDays){
+			//console.log('sortDays');
+			var i = 0;
+			var sName = '';
+			var n = 0;
+			var aSorted = [];
+			for(i;i<allDays.length;i++){
+				//console.log( allDays[i] );
+				sName = allDays[i].name;
+				n = Number ( sName[sName.length-1] );
+				aSorted[n] = allDays[i];
+			}
+			return aSorted;
+		}
+		//------------------------------------------------
+		allDaysObjs = sortBatchDays( aDays );
+
+		var allViewLi = '<option value="0"> - Choose a Day - </option>';
+		const allLi = allDaysObjs.map( day => {
+			var s = '<option value=' + day['id'] + '>' + day['name'] + '</option>';
+			allViewLi+= s;
+		});
+
+		//
+		/*
 		//console.log(aDays);
 		allDaysObjs = aDays;
 		var allViewLi = '';
@@ -106,8 +133,11 @@ $(function(){
 			var s = '<option value=' + day['id'] + '>' + day['name'] + '</option>';
 			allViewLi+= s;
 		});
-		//console.log(allViewLi);
+		*/
+		//
 		$('#id_allDaysOfBatch').html(allViewLi);
+		//
+		return false
 	}
 	//--- renderAllDaysOfBatch / --------------------------------------------------------------------
 	//
@@ -139,6 +169,41 @@ $(function(){
 	//-------- Batch Selection / ----------------------
 	//-------- Day Selection --------------------------
 	$('#id_allDaysOfBatch').on('change',function(event){
+		//console.log( $('#id_allDaysOfBatch')[0].options.selectedIndex );
+
+		var a = $('#id_allDaysOfBatch')[0];
+		var i = a.options.selectedIndex;
+		//console.log('app_3.js : Day Selection : id=',i);
+		var theDay = {};
+		var j = 0;
+		for( j; j<allDaysObjs.length ; j++ ){
+			/*
+			if( i == allDaysObjs[j].id ){
+				console.log('inside for loop, theDay=',theDay);
+				//theDay = allDaysObjs[j];
+				break;
+			}
+			*/
+			//console.log( 'allDaysObjs[j].id=',allDaysObjs[j] );
+			//console.log( 'allDaysObjs[j].id=',allDaysObjs[j].id );
+			if( allDaysObjs[j] !== undefined ){
+				//console.log( 'allDaysObjs[j].id=',allDaysObjs[j].id );
+				if( i == allDaysObjs[j].id ){
+					//console.log('inside for loop, theDay=',theDay);
+					theDay = allDaysObjs[j];
+					break;
+				}
+			}else{
+				console.log('+------------ undefined index ---- !! --- How! ------------');
+				console.log('That is because, we have set the first index (which is index 0) as undefined while sorting the array.');
+				console.log('Rather, we have not set the value of index 0.');
+				console.log('+----------------------------------------------------------');
+			}
+		}
+		// The Selected Day
+		selectedDay = theDay;
+
+		/*
 		var a = $('#id_allDaysOfBatch')[0];
 		var i = a.options.selectedIndex;
 		console.log('app_3.js : Day Selection : id=',i);
@@ -163,6 +228,8 @@ $(function(){
 		//console.log('selectedDay',selectedDay);
 		selectedDay = theDay;
 		console.log('selectedDay',selectedDay);
+		*/
+		return false;
 	});
 	//-------- Day Selection / ------------------------
 	//-------- Session Selection ----------------------------
