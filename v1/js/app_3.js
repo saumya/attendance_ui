@@ -89,7 +89,7 @@ $(function(){
 	$('#id_allDaysOfBatch').on('change',function(event){
 		var a = $('#id_allDaysOfBatch')[0];
 		var i = a.options.selectedIndex;
-		console.log('app_3.js : Day Selection : id=',i);
+		//console.log('app_3.js : Day Selection : id=',i);
 
 		var theDay = {};
 
@@ -97,22 +97,33 @@ $(function(){
 		//console.log('allDaysObjs',allDaysObjs);
 		var j = 0;
 		for(j;j<allDaysObjs.length;j++){
-			//console.log(allDaysObjs[j]);
+			
+			//console.log('allDaysObjs',allDaysObjs);
+
+			//console.log('i',i,':','j',j);
+			//console.log('allDaysObjs[j]',allDaysObjs[j]);
+			
 			//console.log(allDaysObjs[j].id,i);
-			if( i == allDaysObjs[j].id ){
+
+			//if( i == allDaysObjs[j].id ){
+			if( i == j ){
 				//console.log(allDaysObjs[j]);
-				console.log('inside for loop, theDay=',theDay);
 				theDay = allDaysObjs[j];
+				//console.log('inside for loop, theDay=',theDay);
 				break;
 			}
+			
 		}
+		
 		// The Selected Day
+		console.log( theDay );
 		//console.log('theDay',theDay);
 		//console.log('selectedDay',selectedDay);
 		selectedDay = theDay;
-		console.log('selectedDay',selectedDay);
+		//console.log('selectedDay',selectedDay);
 		//
 		$('#btn_markPresent').show();
+		
 		//
 		return false;
 	});
@@ -302,15 +313,30 @@ $(function(){
 	const renderDaysOfTheBatch = function(aDays){
 		console.log('renderDaysOfTheBatch');
 		//console.log(aDays);
-		//allPeopleObjs = aPeople;
-		allDaysObjs = aDays;
+		//
+		const sortBatchDays = function(allDays){
+			//console.log('sortDays');
+			var i = 0;
+			var sName = '';
+			var n = 0;
+			var aSorted = [];
+			for(i;i<allDays.length;i++){
+				//console.log( allDays[i] );
+				sName = allDays[i].name;
+				n = Number ( sName[sName.length-1] );
+				aSorted[n] = allDays[i];
+			}
+			return aSorted;
+		}
+		//
+		//allDaysObjs = aDays;
+		allDaysObjs = sortBatchDays( aDays );
+
 		var allViewLi = '';
 		//
 		var allViewLi = '<option value="0"> - Choose a Day - </option>';
-		const allLi = aDays.map( day => {
-			//console.log(batch);
-			//var s = '<option value='+ batch['id'] +'>'+batch['id']+'-'+batch['name']+'</option>';
-			
+		const allLi = allDaysObjs.map( day => {
+		//const allLi = aDays.map( day => {
 			//var s = '<option value=' + day['id'] +'>' + day['name']+'-id='+day['id'] + '</option>';
 			var s = '<option value=' + day['id'] +'>' + day['name'] + '</option>';
 			allViewLi+= s;
