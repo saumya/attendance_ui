@@ -36,6 +36,10 @@ $(function(){
 		}).catch(function(error1){
 			console.log('getAllBatchNames: ERROR :--------------');
 			console.log(error1);
+			//
+			$('#div_notification').show();
+			$('#div_notification').html(error1+'<br> Please check <strong>your internet connection</strong> and try again.');
+
 		});
 	}
 
@@ -77,7 +81,7 @@ $(function(){
 		if(newName===''){
 			console.log('empty');
 			$('#div_notification').show();
-			$('#div_notification').html("Can not be Empty!");
+			$('#div_notification').html("Batch Name can not be Empty!");
 		}else{
 			//
 			// Working Fine
@@ -97,11 +101,17 @@ $(function(){
 		  .done(function( msg ) {
 		  	console.log('+-----------------------Done');
 		  	console.log(msg);
+		  	$('#div_notification').show();
+		  	$('#div_notification').html("Done. Created a new Batch. You have to <strong>Refresh the page</strong> to see the updated Batch name in the list below.");
 		  	console.log('+-----------------------Done /');
+		  	//getAllBatchNames();
 		  })
 		  .fail(function( err ){
 		  	console.log('+-----------------------Error');
 		  	console.log(err);
+		  	$('#div_notification').show();
+				$('#div_notification').html("Opps! Something went wrong. <br> Please check your internet conneciton and try again. You can <strong>refresh the page</strong> to see the updated list.");
+
 		  	console.log('+-----------------------Error /');
 		  });
 		  
