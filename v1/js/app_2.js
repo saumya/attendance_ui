@@ -145,30 +145,25 @@ $(function(){
 	$('#btn_add_person').on('click',function(){
 		//console.log('Add Person');
 		//console.log('AddPerson',selectedBatchName,',',selectedBatchId);
-		/*
-		if(addButtonIsDisabled){
-			// Do Nothing
-			console.log('AddPerson : Disabled');
-			showInfoToUser('Info: You <strong>can not</strong> just, keep on adding. You have to wait.');
-		}else{*/
-			// Act
-			console.log('Add Person');
-			//addButtonIsDisabled = true;
-			
-			
+
 			var sName = $('#txt_person_name').val();
 			var sNumber = $('#txt_person_phone').val();
 			var tNow = new Date();
 			var sTimeNow = tNow.getHours()+':'+tNow.getMinutes()+':'+tNow.getSeconds()+':'+tNow.getMilliseconds();
 
-			console.log(sTimeNow+': '+sName+' / '+sNumber);
+			console.log('addPerson:click: ',sTimeNow+': '+sName+' / '+sNumber);
 			//console.log(selectedBatchName,selectedBatchId);
 			// Check for empty
 			if(sName != '' && sNumber != ''){
 				// show info. Processing.
 				//showInfoToUser('Please wait. The person is getting added to the Batch.');
-				showInfoModalToUser('Please wait. <br/> The person is getting added to the Batch.');
-				$('#id_info_modal_close_button').hide();
+				//showInfoModalToUser('Please wait. <br/> The person is getting added to the Batch.');
+				//$('#id_info_modal_close_button').hide();
+				//
+				//showInfoModalToUser('Are you sure to add? <br> name- <strong>'+sName+'</strong> <br> phone- <strong>'+sNumber+'</strong> <br>');
+				$('#id_confirm_modal').addClass('is-active');
+				$('#id_confirm_details').html('name- <strong>'+sName+'</strong><br> phone- <strong>'+sNumber+'</strong><br> batch- <strong>'+ selectedBatchName +'</strong><br> Preference- <strong>'+selectedGroupName+'</strong> <br><br>');
+				/*
 				//
 				var jsonData = {
 							"calledOnTime": sTimeNow,
@@ -211,6 +206,7 @@ $(function(){
 			  	console.log(error);
 			  	console.log('------ ERROR -------- /');
 				});
+				*/
 				//
 			}else{
 				// Show info. Can not be empty
@@ -218,15 +214,28 @@ $(function(){
 				showInfoToUser(msg);
 				showInfoModalToUser(msg);
 			}
-		/*}// if /END*/
 
 		return false;
 	});// Click Handler /END
 	//
+	//
+	$('#btn_confirm_yes').on('click',function(eventData){
+		eventData.preventDefault();
+		//
+		//
+		return false;
+	});
+	$('#btn_confirm_no').on('click',function(eventData){
+		eventData.preventDefault;
+		//
+		$('#id_confirm_modal').removeClass('is-active');
+		//
+		return false;
+	});
+	//
 	$('#id_info_modal_close_button').on('click',function(eventData){
 		$('.modal').removeClass('is-active');
 	});
-
 	const showInfoToUser = function(message){
 		$('#div_info').html(message);
 		$('#div_info').show();
