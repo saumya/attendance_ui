@@ -13,13 +13,17 @@ $(function(){
 	$('#div_notification').hide();
 	
 	$('#id_all_batches').hide();
-	$('#id_addPersonUI').hide();
-	$('#btn_add_person').hide();
+	//$('#id_addPersonUI').hide();
+	//$('#btn_add_person').hide();
+
 
 	//---------------------------------------------------------------------
 	var selectedBatchName = 'nothing';
 	var selectedBatchId = '0';
 	var selectedGroupName = '0';
+	//
+	var newPersonToBeAdded = {}; //JSON Obj
+
 	// Batch Selection
 	$('#id_all_batches').on('change',function(event){
 		//console.log('onChange');
@@ -63,40 +67,8 @@ $(function(){
 			//console.log( a.options[i].value+':'+a.options[i].label );
 			selectedGroupName = a.options[i].value;
 		}
-
-		// AddPerson Button
-		if(selectedGroupName==0){
-			$('#btn_add_person').hide();
-		}else{
-			$('#btn_add_person').show();
-		}
 	});
 	//---------------------------------------------------------------------
-	/*
-	// Get Batch names to show
-	$('#btn_show_allBatchNames').on('click',function(event){
-		console.log('getAllBatchNames');
-		event.preventDefault();
-		const msg = 'Info: Please wait, getting data.';
-		showInfoToUser(msg);
-		//
-		fetch(requestURL_getBatchNames).then(function(resultData){
-			console.log('getAllBatchNames: done:');
-			resultData.json()
-		  	.then(function(rData){
-		  		$('#div_info').hide();
-		  		renderAllBatchNames(rData);
-		  	})
-		  	.catch(function(error2){
-		  		console.log('JSON Error');
-		  		console.log(error2);
-		  	});
-		}).catch(function(error1){
-			console.log('getAllBatchNames: ERROR :--------------');
-			console.log(error1);
-		});
-	});
-	*/
 	//--- getBatches ----------------------------------------------------------------------
 	const getBatches = function(){
 		//console.log('getBatches ');
@@ -141,6 +113,47 @@ $(function(){
 		$('#div_info').hide();
 	}
 	//---------------------------------------------------------------------
+	const addPersonToBatch = function(){
+		console.log('addPersonToBatch',newPersonToBeAdded);
+		showInfoModalToUser('Please wait.');
+
+		var jData = JSON.stringify(newPersonToBeAdded);
+		var fetchData = {
+			  	method:'POST',
+			  	body: jData,
+			  	mode: 'cors',
+			  	headers:new Headers({
+			  		'Content-Type': 'application/json'
+			  	})
+				};
+		//
+		fetch(requestURL_addPerson,fetchData).then(function(resultData){
+			console.log('------- RESULT --------');
+		  console.log(resultData);
+		  resultData.json()
+		  	.then(function(rData){
+		  		console.log(rData);
+		  		//
+		  		//addButtonIsDisabled = false;
+		  		//$('#div_info').hide();
+		  		showInfoToUser(rData.result);
+		  		//
+		  		hideInfoModalFromTheUser();
+		  		$('#id_info_modal_close_button').show();
+		  	})
+		  	.catch(function(error1){
+		  		console.log('JSON Error');
+		  		console.log(error1);
+		  	});
+		}).catch(function(){
+			console.log('------ ERROR ----------');
+	  	console.log(error);
+	  	console.log('------ ERROR -------- /');
+		});
+		
+	}
+	//---------------------------------------------------------------------
+	//---------------------------------------------------------------------
 	// Add Person to Batch
 	$('#btn_add_person').on('click',function(){
 		//console.log('Add Person');
@@ -151,65 +164,31 @@ $(function(){
 			var tNow = new Date();
 			var sTimeNow = tNow.getHours()+':'+tNow.getMinutes()+':'+tNow.getSeconds()+':'+tNow.getMilliseconds();
 
-			console.log('addPerson:click: ',sTimeNow+': '+sName+' / '+sNumber);
+			//console.log('addPerson:click: ',sTimeNow+': '+sName+' / '+sNumber);
 			//console.log(selectedBatchName,selectedBatchId);
 			// Check for empty
 			if(sName != '' && sNumber != ''){
-				// show info. Processing.
-				//showInfoToUser('Please wait. The person is getting added to the Batch.');
-				//showInfoModalToUser('Please wait. <br/> The person is getting added to the Batch.');
-				//$('#id_info_modal_close_button').hide();
-				//
-				//showInfoModalToUser('Are you sure to add? <br> name- <strong>'+sName+'</strong> <br> phone- <strong>'+sNumber+'</strong> <br>');
-				$('#id_confirm_modal').addClass('is-active');
-				$('#id_confirm_details').html('name- <strong>'+sName+'</strong><br> phone- <strong>'+sNumber+'</strong><br> batch- <strong>'+ selectedBatchName +'</strong><br> Preference- <strong>'+selectedGroupName+'</strong> <br><br>');
-				/*
-				//
-				var jsonData = {
-							"calledOnTime": sTimeNow,
-							"personName": sName,
-							"phone":sNumber,
-							"batch":selectedBatchName,
-							"batchId":selectedBatchId,
-							"group":selectedGroupName
-						};
-				var jData = JSON.stringify(jsonData);
-				var fetchData = {
-					  	method:'POST',
-					  	body: jData,
-					  	mode: 'cors',
-					  	headers:new Headers({
-					  		'Content-Type': 'application/json'
-					  	})
-						};
-				//
-				fetch(requestURL_addPerson,fetchData).then(function(resultData){
-					console.log('------- RESULT --------');
-				  console.log(resultData);
-				  resultData.json()
-				  	.then(function(rData){
-				  		console.log(rData);
-				  		//
-				  		//addButtonIsDisabled = false;
-				  		//$('#div_info').hide();
-				  		showInfoToUser(rData.result);
-				  		//
-				  		hideInfoModalFromTheUser();
-				  		$('#id_info_modal_close_button').show();
-				  	})
-				  	.catch(function(error1){
-				  		console.log('JSON Error');
-				  		console.log(error1);
-				  	});
-				}).catch(function(){
-					console.log('------ ERROR ----------');
-			  	console.log(error);
-			  	console.log('------ ERROR -------- /');
-				});
-				*/
-				//
+				if(selectedGroupName != '0'){
+					if(selectedBatchName != 'nothing'){
+						newPersonToBeAdded = {
+																		"calledOnTime": sTimeNow,
+																		"personName": sName,
+																		"phone":sNumber,
+																		"batch":selectedBatchName,
+																		"batchId":selectedBatchId,
+																		"group":selectedGroupName
+																	};
+						$('#id_confirm_modal').addClass('is-active');
+						$('#id_confirm_details').html('name- <strong>'+sName+'</strong><br> phone- <strong>'+sNumber+'</strong><br> batch- <strong>'+ selectedBatchName +'</strong><br> Preference- <strong>'+selectedGroupName+'</strong> <br><br>');
+					}else{
+						showInfoToUser('Which Batch?');
+						showInfoModalToUser('Which Batch?');
+					}
+				}else{
+					showInfoToUser('Morning or Evening? Select a Group.');
+					showInfoModalToUser('Morning or Evening? Select a Group.');
+				}
 			}else{
-				// Show info. Can not be empty
 				const msg = 'Name or Phone <strong>can not</strong> be empty!';
 				showInfoToUser(msg);
 				showInfoModalToUser(msg);
@@ -222,6 +201,9 @@ $(function(){
 	$('#btn_confirm_yes').on('click',function(eventData){
 		eventData.preventDefault();
 		//
+		$('#id_confirm_modal').removeClass('is-active');
+		//console.log('newPersonToBeAdded',newPersonToBeAdded);
+		addPersonToBatch();
 		//
 		return false;
 	});
@@ -234,18 +216,18 @@ $(function(){
 	});
 	//
 	$('#id_info_modal_close_button').on('click',function(eventData){
-		$('.modal').removeClass('is-active');
+		$('#id_info_modal').removeClass('is-active');
 	});
 	const showInfoToUser = function(message){
 		$('#div_info').html(message);
 		$('#div_info').show();
 	}
 	const showInfoModalToUser = function(message){
-		$('.modal').addClass('is-active');
+		$('#id_info_modal').addClass('is-active');
 		$('#id_modal_message_box').html(message);
 	}
 	const hideInfoModalFromTheUser = function(){
-		$('.modal').removeClass('is-active');
+		$('#id_info_modal').removeClass('is-active');
 	}
 	//
 	getBatches();
