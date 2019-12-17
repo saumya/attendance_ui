@@ -145,17 +145,15 @@ $(function(){
 	$('#btn_add_person').on('click',function(){
 		//console.log('Add Person');
 		//console.log('AddPerson',selectedBatchName,',',selectedBatchId);
-
+		/*
 		if(addButtonIsDisabled){
 			// Do Nothing
 			console.log('AddPerson : Disabled');
-
 			showInfoToUser('Info: You <strong>can not</strong> just, keep on adding. You have to wait.');
-
-		}else{
+		}else{*/
 			// Act
 			console.log('Add Person');
-			addButtonIsDisabled = true;
+			//addButtonIsDisabled = true;
 			
 			
 			var sName = $('#txt_person_name').val();
@@ -168,7 +166,9 @@ $(function(){
 			// Check for empty
 			if(sName != '' && sNumber != ''){
 				// show info. Processing.
-				showInfoToUser('Please wait. The person is getting added to the Batch.');
+				//showInfoToUser('Please wait. The person is getting added to the Batch.');
+				showInfoModalToUser('Please wait. <br/> The person is getting added to the Batch.');
+				$('#id_info_modal_close_button').hide();
 				//
 				var jsonData = {
 							"calledOnTime": sTimeNow,
@@ -195,9 +195,12 @@ $(function(){
 				  	.then(function(rData){
 				  		console.log(rData);
 				  		//
-				  		addButtonIsDisabled = false;
+				  		//addButtonIsDisabled = false;
 				  		//$('#div_info').hide();
 				  		showInfoToUser(rData.result);
+				  		//
+				  		hideInfoModalFromTheUser();
+				  		$('#id_info_modal_close_button').show();
 				  	})
 				  	.catch(function(error1){
 				  		console.log('JSON Error');
@@ -211,17 +214,29 @@ $(function(){
 				//
 			}else{
 				// Show info. Can not be empty
-				showInfoToUser('Name or Phone <strong>can not</strong> be empty!')
+				const msg = 'Name or Phone <strong>can not</strong> be empty!';
+				showInfoToUser(msg);
+				showInfoModalToUser(msg);
 			}
-		}// if /END
+		/*}// if /END*/
 
 		return false;
 	});// Click Handler /END
 	//
+	$('#id_info_modal_close_button').on('click',function(eventData){
+		$('.modal').removeClass('is-active');
+	});
 
 	const showInfoToUser = function(message){
 		$('#div_info').html(message);
 		$('#div_info').show();
+	}
+	const showInfoModalToUser = function(message){
+		$('.modal').addClass('is-active');
+		$('#id_modal_message_box').html(message);
+	}
+	const hideInfoModalFromTheUser = function(){
+		$('.modal').removeClass('is-active');
 	}
 	//
 	getBatches();
