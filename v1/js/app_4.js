@@ -38,6 +38,8 @@ $(function(){
 		}).catch(function(error1){
 			console.log('getAllBatchNames: ERROR :--------------');
 			console.log(error1);
+			
+			showInfoToUser(error1+' <br> Check your internet connection!');
 		});
 	}
 
