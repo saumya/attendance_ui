@@ -28,6 +28,21 @@
 	  </ul>
 	</nav>
 
+	<!-- Modal : Confirmation -->
+	<div class="modal" id="id_confirm_modal">
+		<div class="modal-background"></div>
+		<div class="modal-content">
+
+		  <div class="container is-fluid">
+				<div class="notification" id="id_modal_confirm_box">
+					<!-- dynamic message -->
+				</div>
+		  </div>
+
+		</div>
+		<button class="modal-close is-large" aria-label="close" id="id_modal_confirm_close_button"></button>
+	</div>
+
 	<section class="section">
 
 		<!-- UI | Display Batch Names -->
@@ -40,11 +55,14 @@
     		Show <strong>All Batch</strong> names.
   		</div>
 		  
+		  <!--
 			<div class="field">
 			  <p class="control">
 					<a class="button is-info" id="btn_show_allBatchNames"> Show All Batch Names </a>
 				</p>
 			</div>
+			-->
+
 			<div class="field">
 				<div class="control">
 					<div class="select is-primary is-large">

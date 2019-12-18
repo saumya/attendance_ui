@@ -8,11 +8,11 @@ $(function(){
 	var requestURL_getBatchNames = REST_URI+'/getBatchNames/';
 	var requestURL_addDates = REST_URI+'/addDates/';
 	//---------------------------------------------------------------------
-	$('#div_info').hide();
+	//$('#div_info').hide();
 	$('#div_notification').hide();
 
-	$('#id_all_batches').hide();
-	$('#id_addDaysUI').hide();
+	//$('#id_all_batches').hide();
+	//$('#id_addDaysUI').hide();
 	//---------------------------------------------------------------------
 	var selectedBatchName = 'nothing';
 	var selectedBatchId = '0';
@@ -20,17 +20,15 @@ $(function(){
 
 //---------------------------------------------------------------------
 	// Get Batch names to show
-	$('#btn_show_allBatchNames').on('click',function(){
-		console.log('TODO: getAllBatchNames');
+	const getAllBatchNames = function(){
+		//console.log('getAllBatchNames');
+		showInfoToUser('Please wait, getting the Batch names from server.');
+
 		fetch(requestURL_getBatchNames).then(function(resultData){
 			console.log('getAllBatchNames: done:');
 			resultData.json()
 		  	.then(function(rData){
-		  		/*
-		  		console.log('------- data');
-		  		console.log(rData);
-		  		console.log('------- data /');
-		  		*/
+		  		$('#div_info').hide();
 		  		renderAllBatchNames(rData);
 		  	})
 		  	.catch(function(error2){
@@ -41,10 +39,10 @@ $(function(){
 			console.log('getAllBatchNames: ERROR :--------------');
 			console.log(error1);
 		});
-	});
+	}
 
 	const renderAllBatchNames = function(aNames){
-		console.log('renderAllBatchNames');
+		//console.log('renderAllBatchNames');
 		//console.log(aNames);
 		// JSON.parse(jstring);
 		//console.log('aNames.length=',aNames.length);
@@ -108,12 +106,6 @@ $(function(){
 			selectedGroupName = a.options[i].value;
 		}
 
-		// AddPerson Button
-		if(selectedGroupName==0){
-			$('#btn_add_person').hide();
-		}else{
-			$('#btn_add_person').show();
-		}
 	});
 	//---------------------------------------------------------------------
 	// $('#dt_1').val()
@@ -175,19 +167,9 @@ $(function(){
 				"day7": d7
 			}
 		};
-		var jData = JSON.stringify(jsonData);
-		var fetchData = {
-			  	method:'POST',
-			  	body: jData,
-			  	mode: 'cors',
-			  	headers:new Headers({
-			  		'Content-Type': 'application/json'
-			  	})
-			  };
+		//console.log(jsonData);
 
-		console.log(jsonData);
-
-		
+		/*
 		fetch(requestURL_addDates,fetchData).then(function(resultData){
 			console.log('add_dates ------- RESULT --------');
 			//console.log(resultData);
@@ -205,10 +187,72 @@ $(function(){
 			console.log(error);
 			console.log('add_dates ----- ERROR / -----');
 		});
-		
+		*/
+		//
+		//if( selectedBatchId === '0'){
+		if( selectedBatchName === 'nothing'){
+			console.log('No batch selected!');
+			showInfoToUser('Select a <strong>Batch</strong>.');
+			showModalInfo('Select a <strong>Batch</strong> before moving forward.');
+		}else{
+			if( (d1 == '') || (d2=='') || (d3=='') || (d4=='') || (d5=='') || (d6=='') || (d7=='') ){
+				showInfoToUser('Select the <strong>dates</strong> for <strong>all the days</strong>.');
+				showModalInfo('Select the <strong>dates</strong> for <strong>all the days</strong>.');
+			}else{
+				// send to backend
+				saveTheDatesForTheBatch( jsonData );
+			}
+		}
 		//
 		return false;
 	});
 	//---------------------------------------------------------------------
-
+	const saveTheDatesForTheBatch = function(jsonData){
+		var jData = JSON.stringify(jsonData);
+		var fetchData = {
+			  	method:'POST',
+			  	body: jData,
+			  	mode: 'cors',
+			  	headers:new Headers({
+			  		'Content-Type': 'application/json'
+			  	})
+			  };
+		//
+		fetch(requestURL_addDates,fetchData).then(function(resultData){
+			//console.log('add_dates ------- RESULT --------');
+			//console.log(resultData);
+			resultData.json()
+		  	.then(function(rData){
+		  		console.log('add_dates : result');
+		  		console.log(rData);
+		  		showInfoToUser('Success. Dates are added.');
+		  	})
+		  	.catch(function(error1){
+		  		console.log('add_dates : JSON Error');
+		  		console.log(error1);
+		  		showInfoToUser('Error! Adding dates failed.');
+		  	});
+		}).catch(function(error){
+			console.log('add_dates ----- ERROR -------');
+			console.log(error);
+			console.log('add_dates ----- ERROR / -----');
+		});
+	}
+	//---------------------------------------------------------------------
+	const showInfoToUser = function(message){
+		$('#div_info').html(message);
+		$('#div_info').show();
+	}
+	// modal
+	const showModalInfo = function(message){
+		$('#id_confirm_modal').addClass('is-active');
+		$('#id_modal_confirm_box').html(message);
+	}
+	$('#id_modal_confirm_close_button').on('click',function(eventData){
+		$('#id_confirm_modal').removeClass('is-active');
+	});
+	// modal /
+	//---------------------------------------------------------------------
+	getAllBatchNames();
+	//---------------------------------------------------------------------
 });
