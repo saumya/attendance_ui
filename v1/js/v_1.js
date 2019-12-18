@@ -171,6 +171,8 @@ $(function(){
 	$('#id_allDaysOfBatch').on('change',function(event){
 		//console.log( $('#id_allDaysOfBatch')[0].options.selectedIndex );
 
+		console.log('allDaysObjs',allDaysObjs);
+
 		var a = $('#id_allDaysOfBatch')[0];
 		var i = a.options.selectedIndex;
 		//console.log('app_3.js : Day Selection : id=',i);
@@ -184,13 +186,21 @@ $(function(){
 				break;
 			}
 			*/
-			//console.log( 'allDaysObjs[j].id=',allDaysObjs[j] );
+			//console.log( 'allDaysObjs[j]=',allDaysObjs[j] );
+			//console.log( 'allDaysObjs[j].name=',allDaysObjs[j]['name'] );
 			//console.log( 'allDaysObjs[j].id=',allDaysObjs[j].id );
 			if( allDaysObjs[j] !== undefined ){
+
+				//console.log( 'allDaysObjs[j]=',allDaysObjs[j] );
+				//console.log('i=',i);
+				//console.log( 'allDaysObjs[j].name=',allDaysObjs[j].name);
+				//console.log( 'allDaysObjs[j].day=',allDaysObjs[j].name.charAt( allDaysObjs[j].name.length-1 ) );
 				//console.log( 'allDaysObjs[j].id=',allDaysObjs[j].id );
-				if( i == allDaysObjs[j].id ){
-					//console.log('inside for loop, theDay=',theDay);
+
+				//if( i == allDaysObjs[j].id ){
+				if( i == allDaysObjs[j].name.charAt( allDaysObjs[j].name.length-1 ) ){
 					theDay = allDaysObjs[j];
+					//console.log('inside for loop, theDay=',theDay);
 					break;
 				}
 			}else{
