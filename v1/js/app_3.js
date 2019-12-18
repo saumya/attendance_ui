@@ -13,11 +13,12 @@ $(function(){
 	$('#div_info').hide();
 	$('#div_notification').hide();
 	
-	$('#id_all_batches').hide();
-	$('#id_addPersonUI').hide();
+	//$('#id_all_batches').hide();
+	//$('#id_addPersonUI').hide();
+	
 	//$('#btn_add_person').hide();
 
-	$('#btn_markPresent').hide();
+	//$('#btn_markPresent').hide();
 
 	//---------------------------------------------------------------------
 	var selectedBatchName = 'nothing';
@@ -26,41 +27,22 @@ $(function(){
 	var selectedDay = {};
 	// Batch Selection
 	$('#id_all_batches').on('change',function(event){
-		//console.log('onChange');
-		//console.log( $('#id_all_batches').val() );
-
 		var a = $('#id_all_batches')[0];
 		var i = a.options.selectedIndex;
-
 		if( a.options[i].value == 0 ){
-			//console.log('---- Nothing Selected --------');
 			$("#id_sBName").text( 'No batch!' );
 			selectedBatchName = 'nothing';
 			selectedBatchId = '0';
 		}else{
-			//console.log( a.options[i].value+':'+a.options[i].label );
-			
 			selectedBatchName = a.options[i].label;
 			selectedBatchId = a.options[i].value;
-
 			// setting batch name in display
 			$("#id_sBName").text( selectedBatchName );
 			//
 			$('#id_addPersonUI').show();
-			
 			// getting people of this batch
 			getPersonsOfBatch(selectedBatchName);
 		}
-
-		/*
-		//console.log('onChange:',selectedBatchName,',',selectedBatchId);
-		if(selectedBatchId == 0){
-			//console.warn('Disable the AddPersonUI');
-			$('#id_addPersonUI').hide();
-		}else{
-			$('#id_addPersonUI').show();
-		}	
-		*/
 
 	});
 
@@ -75,14 +57,6 @@ $(function(){
 			selectedGroupName = a.options[i].value;
 		}
 
-		/*
-		// AddPerson Button
-		if(selectedGroupName==0){
-			$('#btn_add_person').hide();
-		}else{
-			$('#btn_add_person').show();
-		}
-		*/
 	});
 	//---------------------------------------------------------------------
 	// Day Selection
@@ -123,30 +97,21 @@ $(function(){
 		
 		// The Selected Day
 		console.log( theDay );
-		//console.log('theDay',theDay);
-		//console.log('selectedDay',selectedDay);
 		selectedDay = theDay;
-		//console.log('selectedDay',selectedDay);
-		//
-		$('#btn_markPresent').show();
-		
 		//
 		return false;
 	});
 	//---------------------------------------------------------------------
 	//---------------------------------------------------------------------
 	// Get Batch names to show
-	$('#btn_show_allBatchNames').on('click',function(){
-		//console.log('TODO: getAllBatchNames');
+	const getAllBatchNames = function(){
+		//console.log('getAllBatchNames');
+		showInfoToUser('Wait. Getting all Batch names.');
+
 		fetch(requestURL_getBatchNames).then(function(resultData){
-			//console.log('getAllBatchNames: done:');
 			resultData.json()
 		  	.then(function(rData){
-		  		/*
-		  		console.log('------- data');
-		  		console.log(rData);
-		  		console.log('------- data /');
-		  		*/
+		  		$('#div_info').hide();
 		  		renderAllBatchNames(rData);
 		  	})
 		  	.catch(function(error2){
@@ -157,7 +122,7 @@ $(function(){
 			console.log('getAllBatchNames: ERROR :--------------');
 			console.log(error1);
 		});
-	});
+	};
 
 	const renderAllBatchNames = function(aNames){
 		console.log('renderAllBatchNames');
@@ -192,39 +157,63 @@ $(function(){
 		console.log('Batch = ',batchTime);
 		console.log('Date = ',markingForDate);
 
+		//
+		if( selectedBatchName == 'nothing' ){
+			showModalInfo('Which Batch? <strong>Select</strong> a Batch.');
+		}else{
+			if( aPersons.length == 0 ){
+				showModalInfo('Whom to mark present? Select <strong>some people</strong>.');
+			}else{
+				if( batchTime==undefined ){
+					showModalInfo('Which session, Morning or Evening?');
+				}else{
+					if( markingForDate==undefined ){
+						showModalInfo('Which Date? Select a Date.');
+					}else{
+						showModalConfirmation('Marking for : <strong>'+ markingForDate +'</strong><br>Session : <strong>'+ batchTime +'</strong><br>Batch : <strong>'+ selectedBatchName +'</strong><br>Total present <strong>'+ aPersons.length + '</strong>.<br><br>' );
+					}
+				}
+			}
+		}
+	});// Click /
+
+	//---------------------------------------------------------------------
+	const savePresentsMarking = function(){
+		var batchTime = $("input[name=answer]:checked").val();
+		var markingForDate = selectedDay.date;
+		console.log('savePresentsMarking : Batch = ',batchTime);
+		console.log('savePresentsMarking : Date = ',markingForDate);
+		console.log('savePresentsMarking : aPersons = ',aPersons);
+		//-------------------------------------------------------
 		// getting name of the person
 		aPersons.map(function(item,index){
-			//console.log('person id=',item);
-			/*
-			var i = 0;
-			for( i; i<allPeopleObjs.length; i++ ){
-				if (allPeopleObjs[i].id == item) {
-					console.log(allPeopleObjs[i]);
-				}
-				//console.log( allPeopleObjs[i] );
-			}
-			*/
-
 			allPeopleObjs.map(function(item1,index1){
 				if(item1.id==item){
-					console.log('------ Mark Present ------');
-					console.log(item1);
+					//console.log('------ Mark Present ------');
+					//console.log(item1);
+					var fetchData = JSON.stringify({
+																"person": item1, 
+																"batchTime":batchTime, 
+																"onDate":markingForDate
+															});
 					//
-					// requestURL_markPersonPresent;
 					var fetchData = {
-								method:'POST',
-								body:JSON.stringify({"person": item1, "batchTime":batchTime, "onDate":markingForDate}),
-								mode: 'cors',
-								headers:new Headers({
-									'Content-Type': 'application/json'
-								})
+								method : 'POST',
+								body : fetchData,
+								mode : 'cors',
+								headers : new Headers({
+										'Content-Type': 'application/json'
+									})
 							};
 					//		
 					fetch(requestURL_markPersonPresent,fetchData).then(function(resultData){
-						console.log('------- RESULT --------');
-		  			//console.log(resultData);
 		  			resultData.json().then(function(rData){
 		  				console.log(rData);
+		  				if(rData.result == 'SUCCESS'){
+		  					showInfoToUser('SUCCESS! Marked Present.')
+		  				}else{
+		  					showInfoToUser('FAIL! Please try again.');
+		  				}
 		  			}).catch(function(error2){
 		  				console.log('error2');
 		  				console.log(error2);
@@ -236,24 +225,24 @@ $(function(){
 						console.log('---------- : error1 / : ------------ ');
 					});
 					//
+				}else{
+					// Do Nothing
 				}
 			});
-
 		});
-	});
-
+		//-------------------------------------------------------
+	}
 	//---------------------------------------------------------------------
 	// Get all persons of the selected Batch
 	const getPersonsOfBatch = function(batchName){
 		console.log('getPersonsOfBatch: batchName=',batchName);
+
+		showInfoToUser('Wait. Getting Batch <strong>Details</strong>.');
+
 		fetch(requestURL_getPeople+batchName).then(function(resultData){
 			resultData.json()
 		  	.then(function(rData){
-		  		/*
-		  		console.log('------- getPersonsOfBatch:data ---------');
-		  		console.log(rData);
-		  		console.log('------- getPersonsOfBatch:data / -------');
-		  		*/
+		  		$('#div_info').hide();
 		  		renderPeopleOfTheBatch(rData);
 		  	})
 		  	.catch(function(error2){
@@ -300,11 +289,6 @@ $(function(){
 		fetch(requestURL_getDays+batchName).then(function(resultData){
 			resultData.json()
 		  	.then(function(rData){
-		  		/*
-		  		console.log('------- getPersonsOfBatch:data ---------');
-		  		console.log(rData);
-		  		console.log('------- getPersonsOfBatch:data / -------');
-		  		*/
 		  		renderDaysOfTheBatch(rData);
 		  	})
 		  	.catch(function(error2){
@@ -318,16 +302,13 @@ $(function(){
 	}
 	const renderDaysOfTheBatch = function(aDays){
 		console.log('renderDaysOfTheBatch');
-		//console.log(aDays);
 		//
 		const sortBatchDays = function(allDays){
-			//console.log('sortDays');
 			var i = 0;
 			var sName = '';
 			var n = 0;
 			var aSorted = [];
 			for(i;i<allDays.length;i++){
-				//console.log( allDays[i] );
 				sName = allDays[i].name;
 				n = Number ( sName[sName.length-1] );
 				aSorted[n] = allDays[i];
@@ -342,20 +323,52 @@ $(function(){
 		//
 		var allViewLi = '<option value="0"> - Choose a Day - </option>';
 		const allLi = allDaysObjs.map( day => {
-		//const allLi = aDays.map( day => {
-			//var s = '<option value=' + day['id'] +'>' + day['name']+'-id='+day['id'] + '</option>';
 			var s = '<option value=' + day['id'] +'>' + day['name'] + '</option>';
 			allViewLi+= s;
 		});
-		//console.log(allViewLi);
 		$('#id_allDaysOfBatch').html(allViewLi);
 		//
 	}
 	//---------------------------------------------------------------------
 
+	// modal
+	const showModalInfo = function(message){
+		$('#id_info_modal').addClass('is-active');
+		$('#id_modal_info_box').html(message);
+	}
+	$('#id_modal_info_close_button').on('click',function(eventData){
+		$('#id_info_modal').removeClass('is-active');
+	});
+
+	const showModalConfirmation = function(message){
+		$('#id_confirm_modal').addClass('is-active');
+		$('#id_confirm_details').html(message);
+	}
+	$('#btn_confirm_yes').on('click',function(eventData){
+		eventData.preventDefault();
+		//
+		$('#id_confirm_modal').removeClass('is-active');
+		savePresentsMarking();
+		//
+		return false;
+	});
+	$('#btn_confirm_no').on('click',function(eventData){
+		eventData.preventDefault();
+		//
+		$('#id_confirm_modal').removeClass('is-active');
+		//
+		return false;
+	});
+	// modal /
+
+	const showInfoToUser = function(message){
+		$('#div_info').html(message);
+		$('#div_info').show();
+	}
+
 	//---------------------------------------------------------------------
-
-
+	getAllBatchNames();
+	//
 }); // jQuery Init /END
 //
 
@@ -366,18 +379,12 @@ var aPersons = []; // selected Persons ids
 //var aPersonNames = [];
 
 const onPersonClicked = function(id){
-	//const onPersonClicked = function(id,name){
 	console.log('onPersonClicked');
-	//console.log('person id=',id);
-	//aPersons.push(id);
-	//console.log('aPersons=',aPersons);
 	//TODO: Fix the duplicates
-
 	addRemove(id);
 }
 
 const addRemove = function(id){
-	//console.log('addRemove : id=',id);
 	var matchFound = false;
 	aPersons.map(function(item,index){
 		if(id==item){

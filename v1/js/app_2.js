@@ -208,7 +208,7 @@ $(function(){
 		return false;
 	});
 	$('#btn_confirm_no').on('click',function(eventData){
-		eventData.preventDefault;
+		eventData.preventDefault();
 		//
 		$('#id_confirm_modal').removeClass('is-active');
 		//

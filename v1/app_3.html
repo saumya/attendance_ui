@@ -28,6 +28,40 @@
 	  </ul>
 	</nav>
 
+	<!-- Modal : Information -->
+	<div class="modal" id="id_info_modal">
+		<div class="modal-background"></div>
+		<div class="modal-content">
+
+		  <div class="container is-fluid">
+				<div class="notification" id="id_modal_info_box">
+					<!-- dynamic message -->
+				</div>
+		  </div>
+
+		</div>
+		<button class="modal-close is-large" aria-label="close" id="id_modal_info_close_button"></button>
+	</div>
+
+	<!-- Modal : Confirmation -->
+	<div class="modal" id="id_confirm_modal">
+		<div class="modal-background"></div>
+		<div class="modal-content">
+
+		  <div class="container is-fluid">
+				<div class="notification" id="id_modal_confirm_box">
+					<h3 class="is-size-3">Are you sure?</h3>
+					<br>
+					<div class="is-size-4" id="id_confirm_details"> <!-- Dynamic --> </div>
+					<button class="button is-large is-success" id="btn_confirm_yes">Yes, Add.</button>
+					<button class="button is-large is-danger" id="btn_confirm_no">No</button>
+				</div>
+		  </div>
+
+		</div>
+		<!-- <button class="modal-close is-large" aria-label="close" id="id_modal_confirm_close_button"></button> -->
+	</div>
+
 	<section class="section">
 
 		<!-- UI | Display Batch Names -->
@@ -39,11 +73,14 @@
     		Select a <strong>Batch</strong>.
   		</div>
 		  
+		  <!--
 			<div class="field">
 			  <p class="control">
 					<a class="button is-info" id="btn_show_allBatchNames"> Show All Batch Names </a>
 				</p>
 			</div>
+			-->
+
 			<div class="field">
 				<div class="control">
 					<div class="select is-primary is-large">
